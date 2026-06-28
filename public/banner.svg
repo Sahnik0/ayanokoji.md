@@ -25,6 +25,11 @@
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <!-- Rough / pencil texture filter for doodle feel -->
+    <filter id="roughen" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.065" numOctaves="2" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
   </defs>
 
   <!-- Background -->
@@ -33,6 +38,118 @@
 
   <!-- Subtle border -->
   <rect width="900" height="300" fill="none" stroke="#2a2a2a" stroke-width="1" rx="6"/>
+
+  <!-- ============ DOODLE DECORATIONS ============ -->
+
+  <!-- Top-left corner doodle bracket -->
+  <path d="M18,14 L10,14 L10,30" fill="none" stroke="#3a3a3a" stroke-width="1.2" stroke-linecap="round" filter="url(#roughen)"/>
+  <path d="M10,14 L18,14" fill="none" stroke="#3a3a3a" stroke-width="0.8" stroke-linecap="round"/>
+
+  <!-- Top-right corner doodle bracket -->
+  <path d="M882,14 L890,14 L890,30" fill="none" stroke="#3a3a3a" stroke-width="1.2" stroke-linecap="round" filter="url(#roughen)"/>
+
+  <!-- Bottom-left corner doodle bracket -->
+  <path d="M18,286 L10,286 L10,270" fill="none" stroke="#3a3a3a" stroke-width="1.2" stroke-linecap="round" filter="url(#roughen)"/>
+
+  <!-- Bottom-right corner doodle bracket -->
+  <path d="M882,286 L890,286 L890,270" fill="none" stroke="#3a3a3a" stroke-width="1.2" stroke-linecap="round" filter="url(#roughen)"/>
+
+  <!-- Tiny doodle star top-left area -->
+  <g opacity="0.45" filter="url(#roughen)">
+    <line x1="42" y1="22" x2="42" y2="32" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="37" y1="27" x2="47" y2="27" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="38.5" y1="23.5" x2="45.5" y2="30.5" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="45.5" y1="23.5" x2="38.5" y2="30.5" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+  </g>
+
+  <!-- Tiny doodle star top-right area -->
+  <g opacity="0.4" filter="url(#roughen)">
+    <line x1="858" y1="22" x2="858" y2="32" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="853" y1="27" x2="863" y2="27" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="854.5" y1="23.5" x2="861.5" y2="30.5" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="861.5" y1="23.5" x2="854.5" y2="30.5" stroke="#666" stroke-width="0.9" stroke-linecap="round"/>
+  </g>
+
+  <!-- Small scattered doodle dots / tick marks top area -->
+  <g opacity="0.3" stroke="#555" stroke-linecap="round">
+    <line x1="70" y1="18" x2="74" y2="22" stroke-width="1"/>
+    <line x1="82" y1="15" x2="82" y2="20" stroke-width="0.8"/>
+    <line x1="92" y1="19" x2="96" y2="17" stroke-width="0.8"/>
+    <circle cx="106" cy="18" r="1.2" fill="#555" stroke="none"/>
+    <circle cx="118" cy="22" r="0.9" fill="#555" stroke="none"/>
+    <line x1="828" y1="18" x2="832" y2="22" stroke-width="1"/>
+    <line x1="840" y1="15" x2="840" y2="20" stroke-width="0.8"/>
+    <circle cx="850" cy="18" r="1.2" fill="#555" stroke="none"/>
+  </g>
+
+  <!-- Wavy doodle line — top, above the main rule -->
+  <path d="M320,108 Q340,104 360,108 Q380,112 400,108 Q420,104 440,108 Q460,112 480,108 Q500,104 520,108 Q540,112 560,108 Q580,104 600,108 Q620,112 640,108 Q660,104 680,108 Q700,112 720,108 Q740,104 760,108 Q780,112 800,108 Q815,105 820,108"
+    fill="none" stroke="#252525" stroke-width="0.7" stroke-linecap="round" filter="url(#roughen)" opacity="0.8"/>
+
+  <!-- Wavy doodle line — bottom, below the sub-rule -->
+  <path d="M320,212 Q345,208 370,212 Q395,216 420,212 Q445,208 470,212 Q495,216 520,212 Q545,208 570,212 Q595,216 620,212 Q645,208 670,212 Q695,216 720,212 Q745,208 770,212 Q795,216 820,212"
+    fill="none" stroke="#252525" stroke-width="0.7" stroke-linecap="round" filter="url(#roughen)" opacity="0.8"/>
+
+  <!-- Small doodle diamond accent near logo, top -->
+  <path d="M200,64 L204,70 L200,76 L196,70 Z" fill="none" stroke="#444" stroke-width="0.8" stroke-linejoin="round" opacity="0.6" filter="url(#roughen)"/>
+
+  <!-- Small doodle diamond accent near logo, bottom -->
+  <path d="M200,218 L204,224 L200,230 L196,224 Z" fill="none" stroke="#444" stroke-width="0.8" stroke-linejoin="round" opacity="0.6" filter="url(#roughen)"/>
+
+  <!-- Tiny doodle cross near top-right of logo -->
+  <g opacity="0.35" filter="url(#roughen)">
+    <line x1="265" y1="88" x2="271" y2="94" stroke="#555" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="271" y1="88" x2="265" y2="94" stroke="#555" stroke-width="0.9" stroke-linecap="round"/>
+  </g>
+
+  <!-- Tiny doodle cross near bottom-left of logo -->
+  <g opacity="0.35" filter="url(#roughen)">
+    <line x1="131" y1="185" x2="137" y2="191" stroke="#555" stroke-width="0.9" stroke-linecap="round"/>
+    <line x1="137" y1="185" x2="131" y2="191" stroke="#555" stroke-width="0.9" stroke-linecap="round"/>
+  </g>
+
+  <!-- Small scribble near bottom-left corner area -->
+  <path d="M30,255 Q36,251 42,255 Q48,259 54,255" fill="none" stroke="#333" stroke-width="0.9" stroke-linecap="round" opacity="0.5" filter="url(#roughen)"/>
+  <path d="M30,262 Q38,258 46,262 Q52,266 58,262" fill="none" stroke="#333" stroke-width="0.7" stroke-linecap="round" opacity="0.35" filter="url(#roughen)"/>
+
+  <!-- Small scribble near bottom-right corner area -->
+  <path d="M842,255 Q848,251 854,255 Q860,259 866,255" fill="none" stroke="#333" stroke-width="0.9" stroke-linecap="round" opacity="0.5" filter="url(#roughen)"/>
+  <path d="M842,262 Q850,258 858,262 Q864,266 870,262" fill="none" stroke="#333" stroke-width="0.7" stroke-linecap="round" opacity="0.35" filter="url(#roughen)"/>
+
+  <!-- Scattered tiny dots, mid-canvas, low opacity -->
+  <g fill="#444" opacity="0.35">
+    <circle cx="305" cy="135" r="1.3"/>
+    <circle cx="310" cy="165" r="0.9"/>
+    <circle cx="308" cy="180" r="1.1"/>
+    <circle cx="825" cy="140" r="1.3"/>
+    <circle cx="830" cy="162" r="0.9"/>
+    <circle cx="826" cy="176" r="1.1"/>
+  </g>
+
+  <!-- Doodle arrow / chevron pointing right near top-left doodle area -->
+  <path d="M50,248 L56,254 L50,260" fill="none" stroke="#3a3a3a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" filter="url(#roughen)"/>
+
+  <!-- Doodle arrow / chevron pointing left near top-right doodle area -->
+  <path d="M846,248 L840,254 L846,260" fill="none" stroke="#3a3a3a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" filter="url(#roughen)"/>
+
+  <!-- Three small dots above tagline, doodle style -->
+  <g fill="#3a3a3a" opacity="0.5">
+    <circle cx="560" cy="232" r="1.4"/>
+    <circle cx="568" cy="232" r="1.4"/>
+    <circle cx="576" cy="232" r="1.4"/>
+  </g>
+
+  <!-- Tiny hand-drawn tick marks along the thin rule -->
+  <g stroke="#333" stroke-linecap="round" opacity="0.45" filter="url(#roughen)">
+    <line x1="360" y1="116" x2="360" y2="120" stroke-width="0.7"/>
+    <line x1="420" y1="116" x2="420" y2="120" stroke-width="0.7"/>
+    <line x1="480" y1="116" x2="480" y2="120" stroke-width="0.7"/>
+    <line x1="540" y1="116" x2="540" y2="120" stroke-width="0.7"/>
+    <line x1="600" y1="116" x2="600" y2="120" stroke-width="0.7"/>
+    <line x1="660" y1="116" x2="660" y2="120" stroke-width="0.7"/>
+    <line x1="720" y1="116" x2="720" y2="120" stroke-width="0.7"/>
+    <line x1="780" y1="116" x2="780" y2="120" stroke-width="0.7"/>
+  </g>
 
   <!-- ============ HEXAGON LOGO (centered at x=200, y=150) ============ -->
 
