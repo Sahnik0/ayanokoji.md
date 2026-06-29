@@ -21,8 +21,10 @@
     ".": "./.opencode/plugins/ayanokoji.mjs",
     "./plugin": "./.opencode/plugins/ayanokoji.mjs"
   },
+  "bin": "./bin/setup.js",
   "files": [
     "AGENTS.md",
+    "bin/",
     "hooks/",
     "skills/",
     ".opencode/",

@@ -47,9 +47,18 @@ All commands are available as slash commands, `@mentions`, or natural language d
 
 *Deactivate by saying `"stop ayanokoji"` or `"normal mode"`.*
 
+## Setup Guide
+
+### Instant Setup (Recommended)
+Automatically configure the Ayanokoji ruleset for all detected IDEs in your current project directory with a single command:
+```bash
+npx @sahnik/ayanokoji
+```
+This command writes the master `AGENTS.md` to your project root and configures the relevant rule files for Cursor, Windsurf, Copilot, Cline, or Kiro based on your project structure.
+
 ---
 
-## Individual IDE Setup Guide
+## Manual IDE Setup Guide
 
 ### 1. Cursor
 Copy the cursor rule to your project:
