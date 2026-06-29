@@ -1,7 +1,7 @@
 ---
 name: ayanokoji-help
 description: "Quick reference for the Ayanokoji protocol: phases, commands, scaffold rules, behavioral contract."
-homepage: https://github.com/Sahnik00/ayanokoji.md
+homepage: https://github.com/Sahnik0/ayanokoji.md
 license: MIT
 ---
 

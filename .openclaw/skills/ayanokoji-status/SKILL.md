@@ -1,7 +1,7 @@
 ---
 name: ayanokoji-status
 description: "Show a consolidated strategic dashboard of current task, blockers, failures, and progress. One-shot display."
-homepage: https://github.com/Sahnik00/ayanokoji.md
+homepage: https://github.com/Sahnik0/ayanokoji.md
 license: MIT
 ---
 

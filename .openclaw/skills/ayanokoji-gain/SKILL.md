@@ -1,7 +1,7 @@
 ---
 name: ayanokoji-gain
 description: "Strategic progress summary: completed tasks, retry rate, verification quality, protocol adherence."
-homepage: https://github.com/Sahnik00/ayanokoji.md
+homepage: https://github.com/Sahnik0/ayanokoji.md
 license: MIT
 ---
 

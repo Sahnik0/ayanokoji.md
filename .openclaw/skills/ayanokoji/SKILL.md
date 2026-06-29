@@ -1,7 +1,7 @@
 ---
 name: ayanokoji
 description: "Strategic execution protocol. Front-loads intelligence, plans before acting, enforces verification before completing."
-homepage: https://github.com/Sahnik00/ayanokoji.md
+homepage: https://github.com/Sahnik0/ayanokoji.md
 license: MIT
 ---
 

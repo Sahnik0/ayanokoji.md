@@ -78,7 +78,7 @@ cp .windsurf/rules/ayanokoji.md .windsurf/rules/ayanokoji.md
 ### 3. Claude Code / Gemini CLI / Antigravity CLI
 Install as a plugin:
 ```bash
-claude mcp add ayanokoji https://github.com/Sahnik00/ayanokoji.md
+claude mcp add ayanokoji https://github.com/Sahnik0/ayanokoji.md
 ```
 Or use the native commands configured in `commands/` and `gemini-extension.json`.
 

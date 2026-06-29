@@ -6,8 +6,8 @@
     "name": "Sahnik",
     "url": "https://github.com/Sahnik00"
   },
-  "homepage": "https://github.com/Sahnik00/ayanokoji.md",
-  "repository": "https://github.com/Sahnik00/ayanokoji.md",
+  "homepage": "https://github.com/Sahnik0/ayanokoji.md",
+  "repository": "https://github.com/Sahnik0/ayanokoji.md",
   "license": "MIT",
   "keywords": [
     "strategic-planning",
@@ -27,7 +27,7 @@
       "Instructions",
       "Lifecycle hooks"
     ],
-    "websiteURL": "https://github.com/Sahnik00/ayanokoji.md",
+    "websiteURL": "https://github.com/Sahnik0/ayanokoji.md",
     "defaultPrompt": [
       "Activate Ayanokoji strategic protocol for this task.",
       "Review this task plan for gaps.",

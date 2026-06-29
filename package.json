@@ -1,6 +1,6 @@
 {
   "name": "ayanokoji.md",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Strategic execution protocol for AI agents. Front-loads intelligence, plans before acting, verifies before completing.",
   "keywords": [
     "opencode-plugin",
@@ -15,13 +15,13 @@
     "name": "Sahnik",
     "url": "https://github.com/Sahnik00"
   },
-  "homepage": "https://github.com/Sahnik00/ayanokoji.md",
+  "homepage": "https://github.com/Sahnik0/ayanokoji.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sahnik00/ayanokoji.md.git"
+    "url": "git+https://github.com/Sahnik0/ayanokoji.md.git"
   },
   "bugs": {
-    "url": "https://github.com/Sahnik00/ayanokoji.md/issues"
+    "url": "https://github.com/Sahnik0/ayanokoji.md/issues"
   },
   "main": "./.opencode/plugins/ayanokoji.mjs",
   "exports": {

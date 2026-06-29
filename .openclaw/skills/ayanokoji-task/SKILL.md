@@ -1,7 +1,7 @@
 ---
 name: ayanokoji-task
 description: "Initialize a clean TASK.md template for a new task from the description in arguments. One-shot report."
-homepage: https://github.com/Sahnik00/ayanokoji.md
+homepage: https://github.com/Sahnik0/ayanokoji.md
 license: MIT
 ---
 

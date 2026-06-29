@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const HOMEPAGE = 'https://github.com/Sahnik00/ayanokoji.md';
+const HOMEPAGE = 'https://github.com/Sahnik0/ayanokoji.md';
 
 const DESCRIPTIONS = {
   'ayanokoji': 'Strategic execution protocol. Front-loads intelligence, plans before acting, enforces verification before completing.',

@@ -1,7 +1,7 @@
 ---
 name: ayanokoji-review
 description: "Inspect the current TASK.md for strategic completeness before execution begins. One-shot report."
-homepage: https://github.com/Sahnik00/ayanokoji.md
+homepage: https://github.com/Sahnik0/ayanokoji.md
 license: MIT
 ---
 
