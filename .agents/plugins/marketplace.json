@@ -1,0 +1,21 @@
+{
+  "name": "ayanokoji",
+  "interface": {
+    "displayName": "Ayanokoji"
+  },
+  "plugins": [
+    {
+      "name": "ayanokoji",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/sahnik/ayanokoji.md.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

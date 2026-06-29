@@ -1,0 +1,6 @@
+{
+  "name": "ayanokoji",
+  "version": "1.0.0",
+  "description": "Strategic execution protocol for AI agents. Front-loads all intelligence, plans before acting, enforces verification before completing.",
+  "contextFileName": "AGENTS.md"
+}

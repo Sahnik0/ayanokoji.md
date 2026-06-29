@@ -1,0 +1,27 @@
+name: ayanokoji
+version: 1.0.0
+description: Strategic execution protocol for Hermes Agent — always-on context, bundled skills, and slash commands.
+author: Sahnik
+provides_hooks:
+  - pre_llm_call
+  - pre_gateway_dispatch
+provides_commands:
+  - ayanokoji
+  - ayanokoji-review
+  - ayanokoji-audit
+  - ayanokoji-debt
+  - ayanokoji-gain
+  - ayanokoji-help
+  - ayanokoji-task
+  - ayanokoji-status
+  - ayanokoji-gate
+provides_skills:
+  - ayanokoji
+  - ayanokoji-review
+  - ayanokoji-audit
+  - ayanokoji-debt
+  - ayanokoji-gain
+  - ayanokoji-help
+  - ayanokoji-task
+  - ayanokoji-status
+  - ayanokoji-gate

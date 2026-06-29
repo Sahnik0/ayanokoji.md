@@ -1,0 +1,16 @@
+{
+  "name": "ayanokoji",
+  "description": "Strategic execution protocol. Front-loads intelligence, plans before acting, enforces verification before completing.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sahnik",
+    "url": "https://github.com/sahnik"
+  },
+  "homepage": "https://github.com/sahnik/ayanokoji.md",
+  "repository": "https://github.com/sahnik/ayanokoji.md",
+  "license": "MIT",
+  "keywords": ["strategic-planning", "verification", "scaffolding", "productivity"],
+  "commands": "commands/",
+  "skills": "skills/",
+  "hooks": "hooks/copilot-hooks.json"
+}

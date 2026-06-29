@@ -1,0 +1,42 @@
+{
+  "name": "@sahnik/ayanokoji",
+  "version": "1.0.0",
+  "description": "Strategic execution protocol for AI agents. Front-loads intelligence, plans before acting, verifies before completing.",
+  "keywords": ["opencode-plugin", "opencode", "ayanokoji", "pi-package", "pi", "skills"],
+  "license": "MIT",
+  "author": {
+    "name": "Sahnik",
+    "url": "https://github.com/sahnik"
+  },
+  "homepage": "https://github.com/sahnik/ayanokoji.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahnik/ayanokoji.md.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sahnik/ayanokoji.md/issues"
+  },
+  "main": "./.opencode/plugins/ayanokoji.mjs",
+  "exports": {
+    ".": "./.opencode/plugins/ayanokoji.mjs",
+    "./plugin": "./.opencode/plugins/ayanokoji.mjs"
+  },
+  "files": [
+    "AGENTS.md",
+    "hooks/",
+    "skills/",
+    ".opencode/",
+    "pi-extension/",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test tests/*.test.js && npm test --prefix pi-extension"
+  },
+  "pi": {
+    "extensions": ["./pi-extension/index.js"],
+    "skills": ["./skills"]
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

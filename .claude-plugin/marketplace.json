@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ayanokoji",
+  "description": "Strategic execution protocol for AI agents. Front-loads intelligence, plans before acting, verifies before completing.",
+  "owner": {
+    "name": "Sahnik",
+    "url": "https://github.com/sahnik"
+  },
+  "plugins": [
+    {
+      "name": "ayanokoji",
+      "description": "Strategic Execution Protocol — front-loads intelligence, enforces planning, verifies every task.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

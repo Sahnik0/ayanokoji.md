@@ -1,0 +1,2 @@
+description = "Show a consolidated strategic dashboard of current task, blockers, failures, and progress"
+prompt = "Read TASK.md and PROGRESS.md. Present a strategic status summary. Output should include: (1) Active Task: name and current approach step. (2) Open Blockers: list from PROGRESS.md. (3) Recent Failures: from PROGRESS.md Failed Attempts. (4) Total Progress: count of completed tasks. Output as a clean dashboard, then stop."

@@ -1,0 +1,5 @@
+---
+description: Initialize a clean TASK.md template for a new task from the description in arguments
+---
+
+Using the task description: '$ARGUMENTS', generate or completely overwrite TASK.md. Follow this template: Name the task specifically. Under 'What This Task Requires', break down the description into concrete demands (no vague verbs like improve/fix without details). Under 'Files In Scope', explicitly list the files to modify. Under 'Files Out Of Scope', explicitly list protected files from AGENTS.md. Under 'Acceptance Criteria', define a concrete, runnable pass/fail check. Under 'Approach', list numbered, pre-computed execution steps. Under 'Known Risks', pair each risk with a fallback plan. Show the generated TASK.md content to the user, then stop.
