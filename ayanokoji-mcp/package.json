@@ -1,6 +1,6 @@
 {
   "name": "ayanokoji-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server that serves Ayanokoji's lazy-senior-dev instructions as a prompt and a tool.",
   "private": true,
   "type": "module",
