@@ -1,14 +1,26 @@
 #!/usr/bin/env node
 // bin/setup.js — Initialises the Ayanokoji protocol in any project directory.
 // Run: npx ayanokoji.md
+//
+// When invoked as a postinstall script (npm install ayanokoji.md), npm sets
+// INIT_CWD to the directory where the user ran npm install.  process.cwd() is
+// the unpacked package directory instead, so we use INIT_CWD when available.
 
 const fs = require('fs');
 const path = require('path');
 
-const cwd = process.cwd();
+// Resolve the actual user project directory.
+// postinstall: npm sets INIT_CWD = where the user ran npm install.
+// npx / direct run: process.cwd() is already the user's project.
+const cwd = process.env.INIT_CWD || process.cwd();
 
-// Find the packaged AGENTS.md file relative to this script
+// Safety guard: don't let postinstall stomp on our own development checkout.
 const packageRoot = path.join(__dirname, '..');
+if (path.resolve(cwd) === path.resolve(packageRoot)) {
+  // Running inside the package source tree — nothing to set up.
+  process.exit(0);
+}
+
 const sourceAgentsPath = path.join(packageRoot, 'AGENTS.md');
 
 if (!fs.existsSync(sourceAgentsPath)) {
@@ -33,42 +45,172 @@ function writeRule(targetPath, content, label) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Explicit target flag resolution
+//
+// Priority order:
+//   1. process.argv flags:      npx ayanokoji.md --claude
+//   2. npm_config_* env vars:   npm install ayanokoji.md --claude
+//      (npm forwards --flag to lifecycle scripts as npm_config_flag=true)
+//   3. AYANOKOJI_FOR env var:   AYANOKOJI_FOR=claude npx ayanokoji.md
+//
+// Supported flags: --claude  --cursor  --windsurf  --cline
+//                  --kiro    --copilot --all
+// ---------------------------------------------------------------------------
+const VALID_FLAGS = ['claude', 'cursor', 'windsurf', 'cline', 'kiro', 'copilot', 'all'];
+
+function resolveExplicitTargets() {
+  const targets = new Set();
+
+  // 1. process.argv  (npx ayanokoji.md --claude --cursor)
+  for (const arg of process.argv.slice(2)) {
+    const key = arg.replace(/^--/, '').toLowerCase();
+    if (VALID_FLAGS.includes(key)) targets.add(key);
+  }
+
+  // 2. npm_config_*  (npm sets these when you pass --flag to npm install)
+  for (const key of VALID_FLAGS) {
+    if (process.env[`npm_config_${key}`] !== undefined) targets.add(key);
+  }
+
+  // 3. AYANOKOJI_FOR env var  (space- or comma-separated list)
+  const envFor = (process.env.AYANOKOJI_FOR || '').toLowerCase();
+  for (const part of envFor.split(/[\s,]+/)) {
+    if (VALID_FLAGS.includes(part)) targets.add(part);
+  }
+
+  return targets;
+}
+
+const explicitTargets = resolveExplicitTargets();
+// --all is sugar for "every agent"
+const forceAll = explicitTargets.has('all') ||
+  (explicitTargets.size === 0 &&
+    // auto-detect fallback: no IDE markers found anywhere
+    !fs.existsSync(path.join(cwd, '.claude')) &&
+    !fs.existsSync(path.join(cwd, 'CLAUDE.md')) &&
+    !fs.existsSync(path.join(cwd, '.cursor')) &&
+    !fs.existsSync(path.join(cwd, '.cursorrules')) &&
+    !fs.existsSync(path.join(cwd, '.windsurf')) &&
+    !fs.existsSync(path.join(cwd, '.github')) &&
+    !fs.existsSync(path.join(cwd, '.clinerules')) &&
+    !fs.existsSync(path.join(cwd, '.clinerules-temp')) &&
+    !fs.existsSync(path.join(cwd, '.kiro'))
+  );
+
+// Helper: should we configure a given agent?
+// Explicit flag always wins. Fall back to auto-detection or forceAll.
+function shouldConfigure(flag, ...detectionPaths) {
+  if (explicitTargets.size > 0 && !explicitTargets.has('all')) {
+    return explicitTargets.has(flag);
+  }
+  if (forceAll) return true;
+  return detectionPaths.some(p => fs.existsSync(p));
+}
+
+// ---------------------------------------------------------------------------
+
 console.log('♟️  Ayanokoji — Strategic Execution Protocol Setup\n');
 
-// 1. Write the master AGENTS.md rulebook to the project root
+// 1. Write the master AGENTS.md rulebook to the project root (always)
 writeRule(path.join(cwd, 'AGENTS.md'), agentsContent, 'Master Rulebook (AGENTS.md)');
 
-// 2. Detect IDE directories and write matching rulesets
-const hasCursor = fs.existsSync(path.join(cwd, '.cursor')) || fs.existsSync(path.join(cwd, '.cursorrules'));
-const hasWindsurf = fs.existsSync(path.join(cwd, '.windsurf'));
-const hasGithub = fs.existsSync(path.join(cwd, '.github'));
-const hasCline = fs.existsSync(path.join(cwd, '.clinerules')) || fs.existsSync(path.join(cwd, '.clinerules-temp'));
+// 2. Configure each agent based on explicit flags or auto-detection
+const configured = [];
 
-// If no directories are detected, write rulesets for all popular options by default.
-const forceAll = !hasCursor && !hasWindsurf && !hasGithub && !hasCline;
+// --- Claude Code ---
+if (shouldConfigure('claude', path.join(cwd, '.claude'), path.join(cwd, 'CLAUDE.md'))) {
+  writeRule(path.join(cwd, 'CLAUDE.md'), canonical, 'Claude Code (CLAUDE.md)');
+  configured.push('Claude Code');
+}
 
-if (hasCursor || forceAll) {
+// --- Cursor ---
+if (shouldConfigure('cursor', path.join(cwd, '.cursor'), path.join(cwd, '.cursorrules'))) {
   const cursorFrontmatter = '---\ndescription: Ayanokoji — Strategic Execution Protocol. Front-loads intelligence, plans before acting, verifies before completing.\nglobs:\nalwaysApply: true\n---\n\n';
-  writeRule(path.join(cwd, '.cursor/rules/ayanokoji.mdc'), cursorFrontmatter + canonical, 'Cursor System Rule');
+  writeRule(path.join(cwd, '.cursor/rules/ayanokoji.mdc'), cursorFrontmatter + canonical, 'Cursor');
+  configured.push('Cursor');
 }
 
-if (hasWindsurf || forceAll) {
-  writeRule(path.join(cwd, '.windsurf/rules/ayanokoji.md'), canonical, 'Windsurf Rule');
+// --- Windsurf ---
+if (shouldConfigure('windsurf', path.join(cwd, '.windsurf'))) {
+  writeRule(path.join(cwd, '.windsurf/rules/ayanokoji.md'), canonical, 'Windsurf');
+  configured.push('Windsurf');
 }
 
-if (hasCline || forceAll) {
-  writeRule(path.join(cwd, '.clinerules/ayanokoji.md'), canonical, 'Cline Rule');
-  writeRule(path.join(cwd, '.agents/rules/ayanokoji.md'), canonical, 'Generic Agent Rule');
+// --- Cline / generic agent ---
+if (shouldConfigure('cline', path.join(cwd, '.clinerules'), path.join(cwd, '.clinerules-temp'))) {
+  writeRule(path.join(cwd, '.clinerules/ayanokoji.md'), canonical, 'Cline');
+  writeRule(path.join(cwd, '.agents/rules/ayanokoji.md'), canonical, 'Generic Agent');
+  configured.push('Cline');
 }
 
-if (hasGithub || forceAll) {
-  writeRule(path.join(cwd, '.github/copilot-instructions.md'), canonical, 'GitHub Copilot Instructions');
+// --- GitHub Copilot ---
+if (shouldConfigure('copilot', path.join(cwd, '.github'))) {
+  writeRule(path.join(cwd, '.github/copilot-instructions.md'), canonical, 'GitHub Copilot');
+  configured.push('GitHub Copilot');
 }
 
-// Write Kiro steering rule if Kiro directory is present or forceAll is active
-if (fs.existsSync(path.join(cwd, '.kiro')) || forceAll) {
+// --- Kiro ---
+if (shouldConfigure('kiro', path.join(cwd, '.kiro'))) {
   const kiroFrontmatter = '---\ntitle: Ayanokoji — Strategic Execution Protocol\ninclusion: always\n---\n\n';
-  writeRule(path.join(cwd, '.kiro/steering/ayanokoji.md'), kiroFrontmatter + canonical, 'Kiro Steering Rule');
+  writeRule(path.join(cwd, '.kiro/steering/ayanokoji.md'), kiroFrontmatter + canonical, 'Kiro');
+  configured.push('Kiro');
 }
 
-console.log('\n♟️  Setup complete. Instruct your agent to read AGENTS.md before writing any code.');
+// 3. Copy .openclaw/skills/ into the user's project (always — skills are agent-agnostic)
+const sourceSkillsDir = path.join(packageRoot, '.openclaw', 'skills');
+const destSkillsDir   = path.join(cwd, '.openclaw', 'skills');
+
+if (fs.existsSync(sourceSkillsDir)) {
+  function copyDir(src, dest) {
+    fs.mkdirSync(dest, { recursive: true });
+    for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+      const srcPath  = path.join(src,  entry.name);
+      const destPath = path.join(dest, entry.name);
+      if (entry.isDirectory()) {
+        copyDir(srcPath, destPath);
+      } else {
+        fs.copyFileSync(srcPath, destPath);
+        console.log(`✅ Installed skill: ${path.relative(cwd, destPath)}`);
+      }
+    }
+  }
+  copyDir(sourceSkillsDir, destSkillsDir);
+} else {
+  console.warn('⚠️  Skills source directory not found in package — skipping skill install.');
+}
+
+// 4. Self-cleanup when installed via `npm install ayanokoji.md`.
+//    The package has no runtime value sitting in node_modules after setup runs.
+//    Remove it from dependencies/devDependencies so the project stays clean.
+if (process.env.npm_lifecycle_event === 'postinstall' && process.env.INIT_CWD) {
+  const pkgJsonPath = path.join(cwd, 'package.json');
+  try {
+    const raw  = fs.readFileSync(pkgJsonPath, 'utf8');
+    const pkg  = JSON.parse(raw);
+    let changed = false;
+    for (const section of ['dependencies', 'devDependencies', 'optionalDependencies']) {
+      if (pkg[section] && pkg[section]['ayanokoji.md']) {
+        delete pkg[section]['ayanokoji.md'];
+        // Remove the section entirely if it is now empty.
+        if (Object.keys(pkg[section]).length === 0) delete pkg[section];
+        changed = true;
+      }
+    }
+    if (changed) {
+      fs.writeFileSync(pkgJsonPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+      console.log('🗑️  Removed ayanokoji.md from package.json (one-shot setup tool, not a runtime dep).');
+    }
+  } catch (_) {
+    // No package.json or read error — silently skip, not a fatal condition.
+  }
+}
+
+// 5. Summary
+console.log('\n♟️  Setup complete.');
+if (configured.length > 0) {
+  console.log(`   Configured for: ${configured.join(', ')}`);
+} else {
+  console.log('   AGENTS.md written. No agent-specific files were needed.');
+}
+console.log('   Instruct your agent to read AGENTS.md before writing any code.');

@@ -50,11 +50,77 @@ All commands are available as slash commands, `@mentions`, or natural language d
 ## Setup Guide
 
 ### Instant Setup (Recommended)
-Automatically configure the Ayanokoji ruleset for all detected IDEs in your current project directory with a single command:
+
+Run in your project directory. Ayanokoji auto-detects your IDE from directory markers and writes only the relevant rule files:
+
 ```bash
 npx ayanokoji.md
 ```
-This command writes the master `AGENTS.md` to your project root and configures the relevant rule files for Cursor, Windsurf, Copilot, Cline, or Kiro based on your project structure.
+
+> **Auto-detection rules:** `.claude/` or `CLAUDE.md` → Claude Code · `.cursor/` → Cursor · `.windsurf/` → Windsurf · `.clinerules/` → Cline · `.kiro/` → Kiro · `.github/` → GitHub Copilot. If **none** are found, all rulesets are written.
+
+---
+
+### Target a Specific Agent
+
+Pass a flag to skip auto-detection and configure exactly one agent:
+
+```bash
+# npx (one-shot, nothing installed in node_modules)
+npx ayanokoji.md --claude       # Claude Code  → CLAUDE.md
+npx ayanokoji.md --cursor       # Cursor       → .cursor/rules/ayanokoji.mdc
+npx ayanokoji.md --windsurf     # Windsurf     → .windsurf/rules/ayanokoji.md
+npx ayanokoji.md --cline        # Cline        → .clinerules/ayanokoji.md
+npx ayanokoji.md --kiro         # Kiro         → .kiro/steering/ayanokoji.md
+npx ayanokoji.md --copilot      # GitHub Copilot → .github/copilot-instructions.md
+npx ayanokoji.md --all          # Every agent at once
+```
+
+You can also stack flags to configure multiple agents in one run:
+
+```bash
+npx ayanokoji.md --claude --cursor
+```
+
+#### Using `npm install` with a flag
+
+When installing via `npm install`, pass the same flag — npm forwards it to the postinstall script automatically:
+
+```bash
+npm install ayanokoji.md --claude
+npm install ayanokoji.md --cursor
+npm install ayanokoji.md --all
+```
+
+> After setup completes, the package removes itself from your `package.json` automatically — it is a one-shot tool, not a runtime dependency. The `node_modules/ayanokoji.md` folder will be gone on the next `npm install`.
+
+#### Environment variable fallback
+
+If flags are inconvenient (CI pipelines, scripts), use `AYANOKOJI_FOR`:
+
+```bash
+AYANOKOJI_FOR=claude npx ayanokoji.md
+AYANOKOJI_FOR="claude,cursor" npx ayanokoji.md
+```
+
+---
+
+### Setup Output
+
+Every run prints a summary of what was configured:
+
+```
+♟️  Ayanokoji — Strategic Execution Protocol Setup
+
+✅ Configured Master Rulebook (AGENTS.md): AGENTS.md
+✅ Configured Claude Code (CLAUDE.md): CLAUDE.md
+✅ Installed skill: .openclaw/skills/ayanokoji/SKILL.md
+...
+
+♟️  Setup complete.
+   Configured for: Claude Code
+   Instruct your agent to read AGENTS.md before writing any code.
+```
 
 ---
 
