@@ -1,5 +1,5 @@
 name: ayanokoji
-version: 1.0.3
+version: 1.0.4
 description: Strategic execution protocol for Hermes Agent — always-on context, bundled skills, and slash commands.
 author: Sahnik0
 provides_hooks:

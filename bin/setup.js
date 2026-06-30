@@ -117,11 +117,15 @@ writeRule(path.join(cwd, 'AGENTS.md'), agentsContent, 'Master Rulebook (AGENTS.m
 
 // 2. Configure each agent based on explicit flags or auto-detection
 const configured = [];
+// Collect the root config dir for each activated agent so we can dump
+// skills + AGENTS.md directly inside it (e.g. .claude/skills/, .cursor/skills/).
+const agentDirs = [];
 
 // --- Claude Code ---
 if (shouldConfigure('claude', path.join(cwd, '.claude'), path.join(cwd, 'CLAUDE.md'))) {
   writeRule(path.join(cwd, 'CLAUDE.md'), canonical, 'Claude Code (CLAUDE.md)');
   configured.push('Claude Code');
+  agentDirs.push(path.join(cwd, '.claude'));
 }
 
 // --- Cursor ---
@@ -129,12 +133,14 @@ if (shouldConfigure('cursor', path.join(cwd, '.cursor'), path.join(cwd, '.cursor
   const cursorFrontmatter = '---\ndescription: Ayanokoji — Strategic Execution Protocol. Front-loads intelligence, plans before acting, verifies before completing.\nglobs:\nalwaysApply: true\n---\n\n';
   writeRule(path.join(cwd, '.cursor/rules/ayanokoji.mdc'), cursorFrontmatter + canonical, 'Cursor');
   configured.push('Cursor');
+  agentDirs.push(path.join(cwd, '.cursor'));
 }
 
 // --- Windsurf ---
 if (shouldConfigure('windsurf', path.join(cwd, '.windsurf'))) {
   writeRule(path.join(cwd, '.windsurf/rules/ayanokoji.md'), canonical, 'Windsurf');
   configured.push('Windsurf');
+  agentDirs.push(path.join(cwd, '.windsurf'));
 }
 
 // --- Cline / generic agent ---
@@ -142,12 +148,14 @@ if (shouldConfigure('cline', path.join(cwd, '.clinerules'), path.join(cwd, '.cli
   writeRule(path.join(cwd, '.clinerules/ayanokoji.md'), canonical, 'Cline');
   writeRule(path.join(cwd, '.agents/rules/ayanokoji.md'), canonical, 'Generic Agent');
   configured.push('Cline');
+  agentDirs.push(path.join(cwd, '.clinerules'));
 }
 
 // --- GitHub Copilot ---
 if (shouldConfigure('copilot', path.join(cwd, '.github'))) {
   writeRule(path.join(cwd, '.github/copilot-instructions.md'), canonical, 'GitHub Copilot');
   configured.push('GitHub Copilot');
+  agentDirs.push(path.join(cwd, '.github'));
 }
 
 // --- Kiro ---
@@ -155,30 +163,51 @@ if (shouldConfigure('kiro', path.join(cwd, '.kiro'))) {
   const kiroFrontmatter = '---\ntitle: Ayanokoji — Strategic Execution Protocol\ninclusion: always\n---\n\n';
   writeRule(path.join(cwd, '.kiro/steering/ayanokoji.md'), kiroFrontmatter + canonical, 'Kiro');
   configured.push('Kiro');
+  agentDirs.push(path.join(cwd, '.kiro'));
 }
 
-// 3. Copy .openclaw/skills/ into the user's project (always — skills are agent-agnostic)
+// 3. Install skills.
+//    a) Always copy to .openclaw/skills/ (universal — picked up by OpenClaw / Antigravity).
+//    b) Also copy into each activated agent's config directory so it is self-contained:
+//         .claude/skills/   .cursor/skills/   .windsurf/skills/   etc.
+//    c) Also write AGENTS.md into each agent directory for easy access.
 const sourceSkillsDir = path.join(packageRoot, '.openclaw', 'skills');
-const destSkillsDir   = path.join(cwd, '.openclaw', 'skills');
 
-if (fs.existsSync(sourceSkillsDir)) {
-  function copyDir(src, dest) {
-    fs.mkdirSync(dest, { recursive: true });
-    for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
-      const srcPath  = path.join(src,  entry.name);
-      const destPath = path.join(dest, entry.name);
-      if (entry.isDirectory()) {
-        copyDir(srcPath, destPath);
-      } else {
-        fs.copyFileSync(srcPath, destPath);
-        console.log(`✅ Installed skill: ${path.relative(cwd, destPath)}`);
-      }
+function copyDir(src, dest) {
+  fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const srcPath  = path.join(src,  entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+      console.log(`✅ Installed skill: ${path.relative(cwd, destPath)}`);
     }
   }
-  copyDir(sourceSkillsDir, destSkillsDir);
+}
+
+if (fs.existsSync(sourceSkillsDir)) {
+  // a) Universal .openclaw/skills/ copy
+  copyDir(sourceSkillsDir, path.join(cwd, '.openclaw', 'skills'));
+
+  // b+c) Per-agent copy: skills + AGENTS.md inside the agent's config dir
+  for (const agentDir of agentDirs) {
+    // skills/
+    copyDir(sourceSkillsDir, path.join(agentDir, 'skills'));
+    // AGENTS.md
+    try {
+      fs.mkdirSync(agentDir, { recursive: true });
+      fs.copyFileSync(sourceAgentsPath, path.join(agentDir, 'AGENTS.md'));
+      console.log(`✅ Installed AGENTS.md: ${path.relative(cwd, path.join(agentDir, 'AGENTS.md'))}`);
+    } catch (e) {
+      console.error(`❌ Failed to copy AGENTS.md into ${path.relative(cwd, agentDir)}:`, e.message);
+    }
+  }
 } else {
   console.warn('⚠️  Skills source directory not found in package — skipping skill install.');
 }
+
 
 // 4. Self-cleanup when installed via `npm install ayanokoji.md`.
 //    The package has no runtime value sitting in node_modules after setup runs.

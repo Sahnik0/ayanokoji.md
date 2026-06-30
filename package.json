@@ -1,6 +1,6 @@
 {
   "name": "ayanokoji.md",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Strategic execution protocol for AI agents. Front-loads intelligence, plans before acting, verifies before completing.",
   "keywords": [
     "opencode-plugin",
